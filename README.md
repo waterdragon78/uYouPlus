@@ -1,3 +1,33 @@
+Note: If installing on macOS:
+1. Extract the compiled IPA
+2. Go to /Payload/YouTube.app/Frameworks
+3. Download (https://github.com/PlayCover/PlayCover/files/12385167/AVKit.zip)
+4. Extract and add the framework to the Frameworks directory from step 2
+5. Open Terminal
+6. cd into the /Payload/YouTube.app/Frameworks directory
+7. If (Module_Framework.framework) exists, cd into it
+8. Run (install_name_tool -change /System/Library/Frameworks/AVKit.framework/AVKit @rpath/AVKit.framework/AVKit “Module_Framework”) Note: you will most likely need to retype the quotes on "Module_Framework", macOS is weird
+9. If (Module_Framework.framework) does NOT exist, run cd .. to end up in the YouTube.app folder
+10. If (Module_Framework.framework) does NOT exist, run (install_name_tool -change /System/Library/Frameworks/AVKit.framework/AVKit @rpath/AVKit.framework/AVKit “YouTube”) Note: you will most likely need to retype the quotes on "YouTube", macOS is weird. I have not tested this, I don't know if it will work.
+11. Compress the Payload folder from step 2
+12. Rename Payload.zip to Payload.ipa
+13. Install Sideloadly (To add a dylib to the Payload.ipa, can also be used to install)
+14. Open Sideloadly and drag in Payload.ipa
+15. Select (Advanced Options)
+16. Check (Inject dylibs/frameworks)
+17. Download this dylib (https://github.com/yarshure/libcolorpicker/raw/master/.theos/obj/debug/arm64/libcolorpicker.dylib)
+18. Drag it into the box below (Inject dylibs/frameworks)
+19. If installing the IPA with PlayCover, select (Export IPA) under (Signing Mode). If installing with Sideloadly, select (Apple ID Sideload), type in your Apple ID under (Apple ID:) at the top, and ensure that (Apple Silicon) is the selected option under (iDevice).
+20. Select the (Start) button at the bottom
+21. If installing the IPA with PlayCover, select where to export the IPA on your Mac.
+22. Wait until the text below the (Start) button says (Done.)
+23. If installing the IPA with SideLoadly, you're done!
+24. If installing the IPA with PlayCover, locate the directory you saved the IPA to and install it with PlayCover. Then, from PlayCover, right click on YouTube, click Settings, go to Misc, and click (Remove Playtools). If you didn't install PlayTools, great! I could not get the app to run with PlayTools installed.
+25. Done!
+
+Sources:
+https://github.com/PlayCover/PlayCover/issues/666
+https://www.reddit.com/r/sideloaded/comments/v0wwro/uyouplus_crashing_at_startup_on_m1/
 # uYouPlus
 
 ![Image 2](https://github.com/qnblackcat/uYouPlus/assets/77606385/c1a1c58a-5d4d-48a6-bb98-d00086719ccc)
