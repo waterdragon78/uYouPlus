@@ -27,8 +27,7 @@ jobs:
       env:
         UYOU_VERSION: ${{ inputs.UYOU_VERSION }}
       run: |
-        cat << 'EOF' > download_script.py
-        from selenium import webdriver
+        python3 <<< 'from selenium import webdriver
         from selenium.webdriver.chrome.service import Service
         from selenium.webdriver.chrome.options import Options
         from selenium.webdriver.support.ui import WebDriverWait
@@ -82,10 +81,8 @@ jobs:
                 driver.quit()
 
         if __name__ == "__main__":
-            download_file()
-        EOF
-        
-        python download_script.py
+            download_file()'
+
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
