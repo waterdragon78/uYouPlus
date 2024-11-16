@@ -24,6 +24,8 @@ jobs:
         pip install selenium webdriver-manager requests
 
     - name: Download file
+      env:
+        UYOU_VERSION: ${{ inputs.UYOU_VERSION }}
       run: |
         cat << 'EOF' > download_script.py
         from selenium import webdriver
@@ -58,3 +60,35 @@ jobs:
                 
                 # Wait for Cloudflare check (at least 5 seconds)
                 time.sleep(7)
+                
+                # Get cookies from Selenium
+                selenium_cookies = driver.get_cookies()
+                
+                # Convert Selenium cookies to requests cookies
+                cookies = {cookie['name']: cookie['value'] for cookie in selenium_cookies}
+                
+                # Download the file using requests
+                response = requests.get(url, cookies=cookies, allow_redirects=True)
+                
+                if response.status_code == 200:
+                    filename = f"com.miro.uyou_{version}_iphoneos-arm.deb"
+                    with open(filename, 'wb') as f:
+                        f.write(response.content)
+                    print(f"Successfully downloaded {filename}")
+                else:
+                    raise Exception(f"Failed to download file: Status code {response.status_code}")
+                    
+            finally:
+                driver.quit()
+
+        if __name__ == "__main__":
+            download_file()
+        EOF
+        
+        python download_script.py
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: uyou-deb
+        path: ./*.deb
